@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, RedirectResponse
 import httpx, base64, json, os
 from cryptography.fernet import Fernet
 
@@ -49,3 +49,15 @@ async def qbo_callback(request: Request):
 def export_tokens():
     from fastapi.responses import FileResponse
     return FileResponse("tokens.json", media_type="application/json", filename="tokens.json")
+
+@app.get("/connect")
+def connect() -> RedirectResponse:
+    auth_url = (
+        "https://appcenter.intuit.com/connect/oauth2"
+        f"?client_id={CLIENT_ID}"
+        f"&redirect_uri={REDIRECT_URI}"
+        "&response_type=code"
+        "&scope=com.intuit.quickbooks.accounting"
+        "&state=123"
+    )
+    return RedirectResponse(auth_url)
