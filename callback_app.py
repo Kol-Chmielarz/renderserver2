@@ -1,3 +1,4 @@
+from urllib.parse import quote_plus
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse, FileResponse
 import httpx, base64, json, os
@@ -53,10 +54,12 @@ def export_tokens():
 
 @app.get("/connect")
 def connect() -> RedirectResponse:
+    # URL-encode the redirect URI so it matches Intuit’s registered value
+    encoded_redirect = quote_plus(REDIRECT_URI)
     auth_url = (
         "https://appcenter.intuit.com/connect/oauth2"
         f"?client_id={CLIENT_ID}"
-        f"&redirect_uri={REDIRECT_URI}"
+        f"&redirect_uri={encoded_redirect}"
         "&response_type=code"
         "&scope=com.intuit.quickbooks.accounting"
         "&state=123"
