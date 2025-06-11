@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request, RedirectResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import RedirectResponse, FileResponse
 import httpx, base64, json, os
 from cryptography.fernet import Fernet
 
